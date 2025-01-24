@@ -9,12 +9,12 @@ const Layout = () => {
   };
 
   const topNavItems = [
-    { icon: UserPlus, label: "تسجيل الدخول", path: "/login" },
-    { icon: MessageSquare, label: "تقديم ملاحظات", path: "/feedback" },
-    { icon: Heart, label: "كن صديقاً", path: "/be-friend" },
+    { icon: Flag, label: "قضيتي", path: "/palestine" },
+    { icon: Landmark, label: "مقدساتي", path: "/holy-places" },
     { icon: ExternalLink, label: "أدواتي", path: "/my-tools" },
-    { icon: Landmark, label: "مفضلاتي", path: "/favorites" },
-    { icon: Home, label: "مقصدي", path: "/my-destination" },
+    { icon: Heart, label: "كن صديقاً", path: "/be-friend" },
+    { icon: MessageSquare, label: "تقديم ملاحظات", path: "/feedback" },
+    { icon: UserPlus, label: "تسجيل الدخول", path: "/login" },
   ];
 
   const mainNavItems = [
