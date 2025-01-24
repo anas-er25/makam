@@ -27,7 +27,7 @@ const Layout = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className="header-nav">
-        <div className="bg-[#004D40] text-white py-1">
+        <div className="bg-primary-dark text-white py-1">
           <div className="container mx-auto px-4 flex justify-between items-center text-sm">
             <div className="flex items-center gap-2">
               <span>فتح باب التسجيل في البناء المنهجي</span>
@@ -52,7 +52,9 @@ const Layout = () => {
         <nav className="bg-primary py-3">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center">
-              <img src="/lovable-uploads/fc35cba4-e0e2-4de0-842d-eefd944407c0.png" alt="Logo" className="h-12" />
+              <Link to="/">
+                <img src="/lovable-uploads/fc35cba4-e0e2-4de0-842d-eefd944407c0.png" alt="Logo" className="h-12" />
+              </Link>
               <div className="nav-links">
                 {topNavItems.map((item) => (
                   <Link

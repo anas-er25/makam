@@ -35,7 +35,7 @@
 }
 
 .header-nav {
-  @apply fixed top-0 left-0 right-0 bg-primary text-white z-50;
+  @apply fixed top-0 left-0 right-0 bg-primary text-white z-50 shadow-md;
 }
 
 .header-nav-content {
