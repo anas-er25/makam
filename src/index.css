@@ -5,6 +5,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    direction: rtl;
+  }
+  
   body {
     @apply bg-background text-foreground font-arabic;
   }
@@ -28,4 +32,20 @@
 
 .button-primary {
   @apply rounded-lg bg-primary px-4 py-2 text-white transition-colors hover:bg-primary/90;
+}
+
+.header-nav {
+  @apply fixed top-0 left-0 right-0 bg-primary text-white z-50;
+}
+
+.header-nav-content {
+  @apply container mx-auto px-4 py-2 flex items-center justify-between;
+}
+
+.nav-links {
+  @apply flex items-center gap-6 text-sm;
+}
+
+.nav-link {
+  @apply flex items-center gap-2 hover:text-secondary transition-colors duration-200;
 }
