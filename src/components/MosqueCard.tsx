@@ -1,4 +1,12 @@
 import { MapPin } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface MosqueCardProps {
   name: string;
@@ -18,7 +26,32 @@ const MosqueCard = ({ name, image, location, description }: MosqueCardProps) => 
           <span>{location}</span>
         </div>
         <p className="mt-2 text-sm text-gray-600">{description}</p>
-        <button className="button-primary mt-4">عرض التفاصيل</button>
+        
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="button-primary mt-4">عرض التفاصيل</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle className="text-right text-2xl font-bold">{name}</DialogTitle>
+            </DialogHeader>
+            <div className="mt-4 space-y-4">
+              <img src={image} alt={name} className="w-full rounded-lg" />
+              
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <MapPin className="h-5 w-5" />
+                  <span className="text-lg">{location}</span>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="text-lg font-semibold">الوصف</h4>
+                  <p className="text-gray-600">{description}</p>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
