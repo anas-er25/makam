@@ -1,7 +1,20 @@
 import { UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    toast({
+      title: "تم إرسال طلب تسجيل الدخول",
+      description: "سيتم التواصل معك قريباً",
+    });
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-md mx-auto">
@@ -12,37 +25,35 @@ const Login = () => {
         </div>
         
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <form className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                البريد الإلكتروني
-              </label>
-              <input
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email">البريد الإلكتروني</Label>
+              <Input
                 type="email"
                 id="email"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                placeholder="example@domain.com"
+                required
               />
             </div>
             
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2">
-                كلمة المرور
-              </label>
-              <input
+            <div className="space-y-2">
+              <Label htmlFor="password">كلمة المرور</Label>
+              <Input
                 type="password"
                 id="password"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                placeholder="••••••••"
+                required
               />
             </div>
             
             <div className="flex items-center justify-between">
-              <label className="flex items-center">
+              <label className="flex items-center gap-2">
                 <input type="checkbox" className="rounded border-gray-300 text-primary focus:ring-primary" />
-                <span className="mr-2 text-sm">تذكرني</span>
+                <span className="text-sm">تذكرني</span>
               </label>
-              <a href="#" className="text-sm text-primary hover:text-primary/80">
+              <Button variant="link" className="text-sm">
                 نسيت كلمة المرور؟
-              </a>
+              </Button>
             </div>
             
             <Button type="submit" className="w-full">
@@ -53,9 +64,9 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               ليس لديك حساب؟{" "}
-              <a href="#" className="text-primary hover:text-primary/80">
+              <Button variant="link" className="text-sm p-0">
                 إنشاء حساب جديد
-              </a>
+              </Button>
             </p>
           </div>
         </div>

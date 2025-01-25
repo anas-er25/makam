@@ -8,6 +8,8 @@ import HolyPlaces from "./pages/HolyPlaces";
 import Palestine from "./pages/Palestine";
 import About from "./pages/About";
 import Layout from "./components/Layout";
+import Login from "./pages/Login";
+import Feedback from "./pages/Feedback";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +25,8 @@ const App = () => (
             <Route path="/holy-places" element={<HolyPlaces />} />
             <Route path="/palestine" element={<Palestine />} />
             <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/feedback" element={<Feedback />} />
           </Route>
         </Routes>
       </BrowserRouter>

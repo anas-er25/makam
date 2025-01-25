@@ -1,7 +1,21 @@
 import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 const Feedback = () => {
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    toast({
+      title: "تم إرسال ملاحظاتك",
+      description: "شكراً لك على مساهمتك في تحسين المنصة",
+    });
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
@@ -11,38 +25,45 @@ const Feedback = () => {
           <p className="text-gray-600">نرحب بملاحظاتكم واقتراحاتكم لتحسين خدماتنا</p>
         </div>
         
-        <form className="space-y-6 bg-white p-6 rounded-lg shadow-md">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-2">
-              الاسم
-            </label>
-            <input
+        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+          <div className="space-y-2">
+            <Label htmlFor="name">الاسم</Label>
+            <Input
               type="text"
               id="name"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="الاسم الكامل"
+              required
             />
           </div>
           
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-2">
-              البريد الإلكتروني
-            </label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="email">البريد الإلكتروني</Label>
+            <Input
               type="email"
               id="email"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+              placeholder="example@domain.com"
+              required
             />
           </div>
           
-          <div>
-            <label htmlFor="message" className="block text-sm font-medium mb-2">
-              الرسالة
-            </label>
-            <textarea
+          <div className="space-y-2">
+            <Label htmlFor="subject">الموضوع</Label>
+            <Input
+              type="text"
+              id="subject"
+              placeholder="موضوع الملاحظات"
+              required
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="message">الرسالة</Label>
+            <Textarea
               id="message"
-              rows={4}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            ></textarea>
+              placeholder="اكتب ملاحظاتك هنا..."
+              className="min-h-[150px]"
+              required
+            />
           </div>
           
           <Button type="submit" className="w-full">
