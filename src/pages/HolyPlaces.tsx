@@ -7,7 +7,9 @@ const HolyPlaces = () => {
     <div className="container py-8">
       {/* Header Section */}
       <div className="mb-8 text-center">
-        <h1 className="mb-2 text-3xl font-bold text-primary">الأماكن المقدسة</h1>
+        <h1 className="mb-2 text-3xl font-bold text-primary">
+          الأماكن المقدسة
+        </h1>
         <p className="text-gray-600">تعرف على أهم الأماكن المقدسة في الإسلام</p>
       </div>
 
@@ -29,7 +31,9 @@ const HolyPlaces = () => {
                 <Landmark className="h-5 w-5 text-primary" /> {/* Icon */}
                 <h3 className="text-xl font-bold">{place.name}</h3>
               </div>
-              <p className="text-gray-600">{place.description}</p>
+              <p className="text-gray-600">
+                {place.description.substring(0, 100) + "..."}
+              </p>
             </div>
           </Link>
         ))}
