@@ -54,7 +54,7 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    
+
     const mosqueData = {
       name: formData.get("name") as string,
       location: formData.get("location") as string,

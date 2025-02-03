@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MosqueManager from "@/components/dashboard/MosqueManager";
 import { useToast } from "@/components/ui/use-toast";
 import { createClient } from "@supabase/supabase-js";
+import MosqueManager from "@/components/dashboard/MosqueManager";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -20,7 +20,9 @@ const Dashboard = () => {
   }, []);
 
   const checkUser = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     if (!session) {
       navigate("/login");
     }

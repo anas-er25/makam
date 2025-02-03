@@ -15,36 +15,42 @@ interface ImageUploadProps {
   onImagesChange: (urls: string[]) => void;
 }
 
-const ImageUpload = ({ multiple = false, images, onImagesChange }: ImageUploadProps) => {
+const ImageUpload = ({
+  multiple = false,
+  images,
+  onImagesChange,
+}: ImageUploadProps) => {
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
 
   const uploadImage = async (file: File) => {
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('mosque-images')
+        .from("mosque-images")
         .upload(filePath, file);
 
       if (uploadError) {
         throw uploadError;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('mosque-images')
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("mosque-images").getPublicUrl(filePath);
 
       return publicUrl;
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
       throw error;
     }
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     try {
       setUploading(true);
       const files = event.target.files;
@@ -64,7 +70,7 @@ const ImageUpload = ({ multiple = false, images, onImagesChange }: ImageUploadPr
         description: "تم إضافة الصور بنجاح",
       });
     } catch (error) {
-      console.error('Error in handleFileUpload:', error);
+      console.error("Error in handleFileUpload:", error);
       toast({
         title: "حدث خطأ",
         description: "فشل في رفع الصور",
