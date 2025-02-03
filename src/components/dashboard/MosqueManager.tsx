@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { createClient } from "@supabase/supabase-js";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+import ImageUpload from "./ImageUpload";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -35,7 +36,20 @@ interface MosqueManagerProps {
 const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
   const [mosques, setMosques] = useState<Mosque[]>([]);
   const [selectedMosque, setSelectedMosque] = useState<Mosque | null>(null);
+  const [images, setImages] = useState<string[]>([]);
   const { toast } = useToast();
+
+  useEffect(() => {
+    fetchMosques();
+  }, [isHolyPlace]);
+
+  useEffect(() => {
+    if (selectedMosque) {
+      setImages(selectedMosque.images || []);
+    } else {
+      setImages([]);
+    }
+  }, [selectedMosque]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,11 +60,11 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
       location: formData.get("location") as string,
       description: formData.get("description") as string,
       is_holy_place: isHolyPlace,
+      images: images,
     };
 
     try {
       if (selectedMosque) {
-        // Update existing mosque
         const { error } = await supabase
           .from("mosques")
           .update(mosqueData)
@@ -63,7 +77,6 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
           description: "تم تحديث معلومات المسجد بنجاح",
         });
       } else {
-        // Create new mosque
         const { error } = await supabase.from("mosques").insert([mosqueData]);
 
         if (error) throw error;
@@ -74,9 +87,9 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
         });
       }
 
-      // Reset form and refresh data
       e.currentTarget.reset();
       setSelectedMosque(null);
+      setImages([]);
       fetchMosques();
     } catch (error) {
       toast({
@@ -168,6 +181,14 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
                 required
               />
             </div>
+            <div>
+              <Label>الصور</Label>
+              <ImageUpload
+                multiple={isHolyPlace}
+                images={images}
+                onImagesChange={setImages}
+              />
+            </div>
             <Button type="submit">حفظ</Button>
           </form>
         </DialogContent>
@@ -177,11 +198,20 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
         {mosques.map((mosque) => (
           <div
             key={mosque.id}
-            className="flex items-center justify-between p-4 border rounded-lg"
+            className="flex items-center justify-between rounded-lg border p-4"
           >
-            <div>
-              <h3 className="font-semibold">{mosque.name}</h3>
-              <p className="text-sm text-gray-500">{mosque.location}</p>
+            <div className="flex items-center gap-4">
+              {mosque.images?.[0] && (
+                <img
+                  src={mosque.images[0]}
+                  alt={mosque.name}
+                  className="h-16 w-16 rounded-lg object-cover"
+                />
+              )}
+              <div>
+                <h3 className="font-semibold">{mosque.name}</h3>
+                <p className="text-sm text-gray-500">{mosque.location}</p>
+              </div>
             </div>
             <div className="flex gap-2">
               <Button
