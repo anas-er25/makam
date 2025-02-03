@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import MyTools from "./pages/MyTools";
 import BeFriend from "./pages/BeFriend";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 import Feedback from "./pages/Feedback";
 import Books from "./pages/Books";
 import MosqueDetails from "./pages/MosqueDetails";
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/my-tools" element={<MyTools />} />
             <Route path="/be-friend" element={<BeFriend />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/books" element={<Books />} />
             <Route path="/mosque/:id" element={<MosqueDetails />} />
