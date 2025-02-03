@@ -20,23 +20,28 @@ const ImageUpload = ({ multiple = false, images, onImagesChange }: ImageUploadPr
   const { toast } = useToast();
 
   const uploadImage = async (file: File) => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
-    const filePath = `${fileName}`;
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
 
-    const { error: uploadError, data } = await supabase.storage
-      .from('mosque-images')
-      .upload(filePath, file);
+      const { error: uploadError } = await supabase.storage
+        .from('mosque-images')
+        .upload(filePath, file);
 
-    if (uploadError) {
-      throw uploadError;
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('mosque-images')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
     }
-
-    const { data: { publicUrl } } = supabase.storage
-      .from('mosque-images')
-      .getPublicUrl(filePath);
-
-    return publicUrl;
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +64,7 @@ const ImageUpload = ({ multiple = false, images, onImagesChange }: ImageUploadPr
         description: "تم إضافة الصور بنجاح",
       });
     } catch (error) {
+      console.error('Error in handleFileUpload:', error);
       toast({
         title: "حدث خطأ",
         description: "فشل في رفع الصور",
@@ -86,6 +92,7 @@ const ImageUpload = ({ multiple = false, images, onImagesChange }: ImageUploadPr
             <button
               onClick={() => removeImage(index)}
               className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+              type="button"
             >
               <X className="h-4 w-4" />
             </button>
