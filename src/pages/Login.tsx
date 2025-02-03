@@ -3,16 +3,55 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createClient } from "@supabase/supabase-js";
+
+// Initialize Supabase client
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL || "",
+  import.meta.env.VITE_SUPABASE_ANON_KEY || ""
+);
 
 const Login = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast({
-      title: "تم إرسال طلب تسجيل الدخول",
-      description: "سيتم التواصل معك قريباً",
-    });
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "خطأ في تسجيل الدخول",
+          description: error.message,
+        });
+      } else if (data.user) {
+        toast({
+          title: "تم تسجيل الدخول بنجاح",
+          description: "جاري تحويلك إلى لوحة التحكم",
+        });
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "خطأ في تسجيل الدخول",
+        description: "حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,6 +70,8 @@ const Login = () => {
               <Input
                 type="email"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@domain.com"
                 required
               />
@@ -41,6 +82,8 @@ const Login = () => {
               <Input
                 type="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
               />
@@ -59,8 +102,8 @@ const Login = () => {
               </Button>
             </div>
 
-            <Button type="submit" className="w-full">
-              تسجيل الدخول
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
             </Button>
           </form>
 
