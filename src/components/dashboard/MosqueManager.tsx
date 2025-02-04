@@ -21,11 +21,11 @@ const supabase = createClient(
 );
 
 interface Mosque {
-  id: string; // Changed from number to string since Supabase uses UUID
+  id: string;
   name: string;
   location: string;
   description: string;
-  images: string[];
+  image_url: string;
   is_holy_place: boolean;
 }
 
@@ -46,7 +46,7 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
 
   useEffect(() => {
     if (selectedMosque) {
-      setImages(selectedMosque.images || []);
+      setImages(selectedMosque.image_url ? [selectedMosque.image_url] : []);
     } else {
       setImages([]);
     }
@@ -61,7 +61,7 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
       location: formData.get("location") as string,
       description: formData.get("description") as string,
       is_holy_place: isHolyPlace,
-      images: images,
+      image_url: images[0] || null,
     };
 
     try {
@@ -194,7 +194,7 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
             <div>
               <Label>الصور</Label>
               <ImageUpload
-                multiple={isHolyPlace}
+                multiple={false}
                 images={images}
                 onImagesChange={setImages}
               />
@@ -211,9 +211,9 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
             className="flex items-center justify-between rounded-lg border p-4"
           >
             <div className="flex items-center gap-4">
-              {mosque.images?.[0] && (
+              {mosque.image_url && (
                 <img
-                  src={mosque.images[0]}
+                  src={mosque.image_url}
                   alt={mosque.name}
                   className="h-16 w-16 rounded-lg object-cover"
                 />

@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 interface MosqueCardProps {
   id: number;
   name: string;
-  image: string;
+  image_url: string;
   location: string;
   description: string;
 }
@@ -20,14 +20,14 @@ interface MosqueCardProps {
 const MosqueCard = ({
   id,
   name,
-  image,
+  image_url,
   location,
   description,
 }: MosqueCardProps) => {
   return (
     <div className="rounded-lg border border-gray-200 bg-white shadow-md">
       <img
-        src={image}
+        src={image_url}
         alt={name}
         className="h-48 w-full rounded-t-lg object-cover"
       />
@@ -52,7 +52,7 @@ const MosqueCard = ({
               </DialogHeader>
               <div className="mt-4 space-y-4">
                 <img
-                  src={image}
+                  src={image_url}
                   alt={name}
                   className="w-full rounded-lg object-cover"
                 />
