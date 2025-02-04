@@ -44,7 +44,7 @@ const Index = () => {
               key={mosque.id}
               id={mosque.id}
               name={mosque.name}
-              image={mosque.images[0]} // Pass the first image
+              image_url={mosque.image_url}
               location={mosque.location}
               description={mosque.description.substring(0, 100) + "..."}
             />
