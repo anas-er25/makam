@@ -2,7 +2,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, X } from "lucide-react";
+import { Loader2, X, Link as LinkIcon, Upload } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -21,6 +29,7 @@ const ImageUpload = ({
   onImagesChange,
 }: ImageUploadProps) => {
   const [uploading, setUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const { toast } = useToast();
 
   const uploadImage = async (file: File) => {
@@ -81,6 +90,22 @@ const ImageUpload = ({
     }
   };
 
+  const handleUrlSubmit = () => {
+    if (!imageUrl) return;
+
+    if (multiple) {
+      onImagesChange([...images, imageUrl]);
+    } else {
+      onImagesChange([imageUrl]);
+    }
+
+    setImageUrl("");
+    toast({
+      title: "تم إضافة الرابط بنجاح",
+      description: "تم إضافة رابط الصورة بنجاح",
+    });
+  };
+
   const removeImage = (indexToRemove: number) => {
     onImagesChange(images.filter((_, index) => index !== indexToRemove));
   };
@@ -105,30 +130,58 @@ const ImageUpload = ({
           </div>
         ))}
       </div>
-      <div>
-        <input
-          type="file"
-          accept="image/*"
-          multiple={multiple}
-          onChange={handleFileUpload}
-          className="hidden"
-          id="image-upload"
-          disabled={uploading}
-        />
-        <label htmlFor="image-upload">
-          <Button
-            type="button"
-            variant="outline"
-            className="cursor-pointer"
+      <div className="flex gap-2">
+        <div>
+          <input
+            type="file"
+            accept="image/*"
+            multiple={multiple}
+            onChange={handleFileUpload}
+            className="hidden"
+            id="image-upload"
             disabled={uploading}
-            asChild
-          >
-            <span>
-              {uploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {multiple ? "إضافة صور" : "إضافة صورة"}
-            </span>
-          </Button>
-        </label>
+          />
+          <label htmlFor="image-upload">
+            <Button
+              type="button"
+              variant="outline"
+              className="cursor-pointer"
+              disabled={uploading}
+              asChild
+            >
+              <span>
+                {uploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                <Upload className="mr-2 h-4 w-4" />
+                {multiple ? "رفع صور" : "رفع صورة"}
+              </span>
+            </Button>
+          </label>
+        </div>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline" type="button">
+              <LinkIcon className="mr-2 h-4 w-4" />
+              إضافة رابط
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>إضافة رابط صورة</DialogTitle>
+            </DialogHeader>
+            <div className="flex gap-2">
+              <Input
+                type="url"
+                placeholder="أدخل رابط الصورة"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+              />
+              <Button onClick={handleUrlSubmit} type="button">
+                إضافة
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
