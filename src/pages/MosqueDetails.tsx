@@ -1,10 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react"; // Add useState and useEffect
-import axios from "axios"; // Import Axios
+import { useEffect, useState } from "react";
+import axios from "axios";
 import {
   MapPin,
   Clock,
-  Share2,
   Facebook,
   Twitter,
   Instagram,
@@ -20,53 +19,102 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { mosqueData } from "@/lib/utils";
+import { createClient } from "@supabase/supabase-js";
+import { useToast } from "@/components/ui/use-toast";
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+
+interface Mosque {
+  id: string;
+  name: string;
+  image_url: string;
+  description: string;
+  location: string;
+  activities: string[];
+  contact: {
+    phone: string;
+    email: string;
+    social: {
+      facebook: string;
+      twitter: string;
+      instagram: string;
+    };
+  };
+}
 
 const MosqueDetails = () => {
   const { id } = useParams();
-  const mosque = mosqueData.find((mosque) => mosque.id === parseInt(id));
+  const [mosque, setMosque] = useState<Mosque | null>(null);
   const [prayerTimes, setPrayerTimes] = useState<{
     Fajr: string;
     Dhuhr: string;
     Asr: string;
     Maghrib: string;
     Isha: string;
-  } | null>(null); // State to store prayer times
-  const [loading, setLoading] = useState(true); // State to handle loading
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
-    if (mosque) {
-      // Fetch prayer times from Aladhan API
-      const fetchPrayerTimes = async () => {
-        try {
-          const response = await axios.get(
-            "https://api.aladhan.com/v1/timingsByCity",
-            {
-              params: {
-                city: mosque.location.split("،")[0].trim(), // Extract city name
-                country: mosque.location.split("،")[1].trim(), // Extract country name
-                method: 2, // Calculation method (ISNA)
-              },
-            }
-          );
-          const timings = response.data.data.timings;
-          setPrayerTimes({
-            Fajr: timings.Fajr,
-            Dhuhr: timings.Dhuhr,
-            Asr: timings.Asr,
-            Maghrib: timings.Maghrib,
-            Isha: timings.Isha,
-          });
-        } catch (error) {
-          console.error("Error fetching prayer times:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
+    fetchMosqueDetails();
+  }, [id]);
 
-      fetchPrayerTimes();
+  const fetchMosqueDetails = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("mosques")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        setMosque(data);
+        fetchPrayerTimes(data.location);
+      }
+    } catch (error) {
+      console.error("Error fetching mosque details:", error);
+      toast({
+        title: "حدث خطأ",
+        description: "حدث خطأ أثناء جلب بيانات المسجد",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  }, [mosque]);
+  };
+
+  const fetchPrayerTimes = async (location: string) => {
+    try {
+      const response = await axios.get(
+        "https://api.aladhan.com/v1/timingsByCity",
+        {
+          params: {
+            city: location.split("،")[0].trim(),
+            country: location.split("،")[1].trim(),
+            method: 2,
+          },
+        }
+      );
+      const timings = response.data.data.timings;
+      setPrayerTimes({
+        Fajr: timings.Fajr,
+        Dhuhr: timings.Dhuhr,
+        Asr: timings.Asr,
+        Maghrib: timings.Maghrib,
+        Isha: timings.Isha,
+      });
+    } catch (error) {
+      console.error("Error fetching prayer times:", error);
+    }
+  };
+
+  if (loading) {
+    return <div>جاري التحميل...</div>;
+  }
 
   if (!mosque) {
     return <div>المسجد غير موجود</div>;
@@ -74,33 +122,29 @@ const MosqueDetails = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">{mosque.name}</h1>
+      <h1 className="mb-6 text-3xl font-bold">{mosque.name}</h1>
 
-      {/* Image Carousel */}
       <div className="mb-8">
-        <Carousel className="w-full max-w-4xl mx-auto">
+        <Carousel className="mx-auto w-full max-w-4xl">
           <CarouselContent>
-            {mosque.images.map((image, index) => (
-              <CarouselItem key={index}>
-                <img
-                  src={image}
-                  alt={`${mosque.name} - صورة ${index + 1}`}
-                  className="w-full h-[400px] object-cover rounded-lg"
-                />
-              </CarouselItem>
-            ))}
+            <CarouselItem>
+              <img
+                src={mosque.image_url}
+                alt={mosque.name}
+                className="h-[400px] w-full rounded-lg object-cover"
+              />
+            </CarouselItem>
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Location and Description */}
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">الموقع والوصف</h2>
-            <div className="flex items-center gap-2 text-gray-600 mb-4">
+            <h2 className="mb-4 text-2xl font-semibold">الموقع والوصف</h2>
+            <div className="mb-4 flex items-center gap-2 text-gray-600">
               <MapPin className="h-5 w-5" />
               <span>{mosque.location}</span>
             </div>
@@ -108,10 +152,9 @@ const MosqueDetails = () => {
           </CardContent>
         </Card>
 
-        {/* Prayer Times */}
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">أوقات الصلاة</h2>
+            <h2 className="mb-4 text-2xl font-semibold">أوقات الصلاة</h2>
             {loading ? (
               <p>جاري تحميل أوقات الصلاة...</p>
             ) : prayerTimes ? (
@@ -143,14 +186,13 @@ const MosqueDetails = () => {
           </CardContent>
         </Card>
 
-        {/* Activities */}
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">الأنشطة</h2>
+            <h2 className="mb-4 text-2xl font-semibold">الأنشطة</h2>
             <ul className="space-y-2">
-              {mosque.activities.map((activity, index) => (
+              {mosque.activities?.map((activity, index) => (
                 <li key={index} className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-primary rounded-full" />
+                  <span className="h-2 w-2 rounded-full bg-primary" />
                   <span>{activity}</span>
                 </li>
               ))}
@@ -158,46 +200,59 @@ const MosqueDetails = () => {
           </CardContent>
         </Card>
 
-        {/* Contact and Social Media */}
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">تواصل معنا</h2>
+            <h2 className="mb-4 text-2xl font-semibold">تواصل معنا</h2>
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Phone className="h-5 w-5 text-gray-600" />
-                <span>{mosque.contact.phone}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="h-5 w-5 text-gray-600" />
-                <span>{mosque.contact.email}</span>
-              </div>
-              <Separator className="my-4" />
-              <div className="flex gap-4">
-                <a
-                  href={mosque.contact.social.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-primary"
-                >
-                  <Facebook className="h-6 w-6" />
-                </a>
-                <a
-                  href={mosque.contact.social.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-primary"
-                >
-                  <Twitter className="h-6 w-6" />
-                </a>
-                <a
-                  href={mosque.contact.social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-primary"
-                >
-                  <Instagram className="h-6 w-6" />
-                </a>
-              </div>
+              {mosque.contact?.phone && (
+                <div className="flex items-center gap-2">
+                  <Phone className="h-5 w-5 text-gray-600" />
+                  <span>{mosque.contact.phone}</span>
+                </div>
+              )}
+              {mosque.contact?.email && (
+                <div className="flex items-center gap-2">
+                  <Mail className="h-5 w-5 text-gray-600" />
+                  <span>{mosque.contact.email}</span>
+                </div>
+              )}
+              {mosque.contact?.social && (
+                <>
+                  <Separator className="my-4" />
+                  <div className="flex gap-4">
+                    {mosque.contact.social.facebook && (
+                      <a
+                        href={mosque.contact.social.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-primary"
+                      >
+                        <Facebook className="h-6 w-6" />
+                      </a>
+                    )}
+                    {mosque.contact.social.twitter && (
+                      <a
+                        href={mosque.contact.social.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-primary"
+                      >
+                        <Twitter className="h-6 w-6" />
+                      </a>
+                    )}
+                    {mosque.contact.social.instagram && (
+                      <a
+                        href={mosque.contact.social.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-primary"
+                      >
+                        <Instagram className="h-6 w-6" />
+                      </a>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </CardContent>
         </Card>

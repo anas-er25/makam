@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface MosqueCardProps {
-  id: number;
+  id: string;
   name: string;
   image_url: string;
   location: string;
@@ -42,7 +42,9 @@ const MosqueCard = ({
         <div className="mt-4 flex space-x-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" className="ml-2">نظرة سريعة</Button>
+              <Button variant="outline" className="ml-2">
+                نظرة سريعة
+              </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
               <DialogHeader>
