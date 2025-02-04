@@ -1,4 +1,3 @@
-
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { Landmark } from "lucide-react";

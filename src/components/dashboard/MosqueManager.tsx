@@ -149,10 +149,12 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
     <div className="space-y-6">
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button onClick={() => {
-            setSelectedMosque(null);
-            setImages([]);
-          }}>
+          <Button
+            onClick={() => {
+              setSelectedMosque(null);
+              setImages([]);
+            }}
+          >
             <Plus className="mr-2 h-4 w-4" />
             إضافة {isHolyPlace ? "مكان مقدس" : "مسجد"} جديد
           </Button>

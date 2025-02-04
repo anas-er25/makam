@@ -6,7 +6,7 @@ CREATE TABLE mosques (
   name TEXT NOT NULL,
   description TEXT,
   location TEXT,
-  images TEXT[], -- Changed from image_url to images array
+  image_url TEXT[], -- Changed from image_url to images array
   opening_times TEXT,
   activities TEXT[],
   social_media JSONB,

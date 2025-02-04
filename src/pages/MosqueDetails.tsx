@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -90,13 +89,16 @@ const MosqueDetails = () => {
 
   const fetchPrayerTimes = async (location: string) => {
     try {
-      const response = await axios.get("https://api.aladhan.com/v1/timingsByCity", {
-        params: {
-          city: location.split("،")[0].trim(),
-          country: location.split("،")[1].trim(),
-          method: 2,
-        },
-      });
+      const response = await axios.get(
+        "https://api.aladhan.com/v1/timingsByCity",
+        {
+          params: {
+            city: location.split("،")[0].trim(),
+            country: location.split("،")[1].trim(),
+            method: 2,
+          },
+        }
+      );
       const timings = response.data.data.timings;
       setPrayerTimes({
         Fajr: timings.Fajr,
