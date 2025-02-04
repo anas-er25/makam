@@ -1,13 +1,49 @@
+
 import { Search } from "lucide-react";
 import MosqueCard from "../components/MosqueCard";
-import { useState } from "react";
-import { mosqueData } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { useToast } from "@/components/ui/use-toast";
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+
+interface Mosque {
+  id: string;
+  name: string;
+  image_url: string;
+  location: string;
+  description: string;
+}
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [mosques, setMosques] = useState<Mosque[]>([]);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchMosques();
+  }, []);
+
+  const fetchMosques = async () => {
+    try {
+      const { data, error } = await supabase.from("mosques").select("*");
+      if (error) throw error;
+      setMosques(data || []);
+    } catch (error) {
+      console.error("Error fetching mosques:", error);
+      toast({
+        title: "حدث خطأ",
+        description: "حدث خطأ أثناء جلب البيانات",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Filter mosques based on search query
-  const filteredMosques = mosqueData.filter(
+  const filteredMosques = mosques.filter(
     (mosque) =>
       mosque.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       mosque.location.toLowerCase().includes(searchQuery.toLowerCase())
@@ -46,7 +82,7 @@ const Index = () => {
               name={mosque.name}
               image_url={mosque.image_url}
               location={mosque.location}
-              description={mosque.description.substring(0, 100) + "..."}
+              description={mosque.description?.substring(0, 100) + "..."}
             />
           ))}
         </div>
