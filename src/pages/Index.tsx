@@ -1,3 +1,4 @@
+
 import { Search } from "lucide-react";
 import MosqueCard from "../components/MosqueCard";
 import { useState, useEffect } from "react";
