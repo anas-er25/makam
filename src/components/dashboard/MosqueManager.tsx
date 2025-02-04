@@ -21,7 +21,7 @@ const supabase = createClient(
 );
 
 interface Mosque {
-  id: number;
+  id: string; // Changed from number to string since Supabase uses UUID
   name: string;
   location: string;
   description: string;
@@ -37,6 +37,7 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
   const [mosques, setMosques] = useState<Mosque[]>([]);
   const [selectedMosque, setSelectedMosque] = useState<Mosque | null>(null);
   const [images, setImages] = useState<string[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -87,11 +88,13 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
         });
       }
 
+      setIsDialogOpen(false);
       e.currentTarget.reset();
       setSelectedMosque(null);
       setImages([]);
       fetchMosques();
     } catch (error) {
+      console.error("Error saving mosque:", error);
       toast({
         title: "حدث خطأ",
         description: "حدث خطأ أثناء حفظ البيانات",
@@ -101,47 +104,54 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
   };
 
   const fetchMosques = async () => {
-    const { data, error } = await supabase
-      .from("mosques")
-      .select("*")
-      .eq("is_holy_place", isHolyPlace);
+    try {
+      const { data, error } = await supabase
+        .from("mosques")
+        .select("*")
+        .eq("is_holy_place", isHolyPlace);
 
-    if (error) {
+      if (error) throw error;
+
+      setMosques(data || []);
+    } catch (error) {
+      console.error("Error fetching mosques:", error);
       toast({
         title: "حدث خطأ",
         description: "حدث خطأ أثناء جلب البيانات",
         variant: "destructive",
       });
-      return;
     }
-
-    setMosques(data || []);
   };
 
-  const handleDelete = async (id: number) => {
-    const { error } = await supabase.from("mosques").delete().eq("id", id);
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase.from("mosques").delete().eq("id", id);
 
-    if (error) {
+      if (error) throw error;
+
+      toast({
+        title: "تم الحذف بنجاح",
+        description: "تم حذف المسجد بنجاح",
+      });
+      fetchMosques();
+    } catch (error) {
+      console.error("Error deleting mosque:", error);
       toast({
         title: "حدث خطأ",
         description: "حدث خطأ أثناء حذف المسجد",
         variant: "destructive",
       });
-      return;
     }
-
-    toast({
-      title: "تم الحذف بنجاح",
-      description: "تم حذف المسجد بنجاح",
-    });
-    fetchMosques();
   };
 
   return (
     <div className="space-y-6">
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button>
+          <Button onClick={() => {
+            setSelectedMosque(null);
+            setImages([]);
+          }}>
             <Plus className="mr-2 h-4 w-4" />
             إضافة {isHolyPlace ? "مكان مقدس" : "مسجد"} جديد
           </Button>
@@ -217,7 +227,10 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => setSelectedMosque(mosque)}
+                onClick={() => {
+                  setSelectedMosque(mosque);
+                  setIsDialogOpen(true);
+                }}
               >
                 <Pencil className="h-4 w-4" />
               </Button>
