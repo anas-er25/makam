@@ -1,3 +1,4 @@
+
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -10,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface MosqueCardProps {
-  id: number;
+  id: string;
   name: string;
   image_url: string;
   location: string;

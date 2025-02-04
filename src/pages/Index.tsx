@@ -16,6 +16,7 @@ interface Mosque {
   image_url: string;
   location: string;
   description: string;
+  is_holy_place: boolean;
 }
 
 const Index = () => {
@@ -29,7 +30,10 @@ const Index = () => {
 
   const fetchMosques = async () => {
     try {
-      const { data, error } = await supabase.from("mosques").select("*");
+      const { data, error } = await supabase
+        .from("mosques")
+        .select("*")
+        .eq("is_holy_place", false);
       if (error) throw error;
       setMosques(data || []);
     } catch (error) {
