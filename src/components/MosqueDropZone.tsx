@@ -32,7 +32,6 @@ const MosqueDropZone = ({ is_holy_place, children, onDrop }: MosqueDropZoneProps
   const handleDrop = async (action: 'move' | 'copy') => {
     try {
       if (action === 'move') {
-        // Update the existing mosque
         const { error } = await supabase
           .from('mosques')
           .update({ is_holy_place: !draggedMosque.is_holy_place })
@@ -45,21 +44,21 @@ const MosqueDropZone = ({ is_holy_place, children, onDrop }: MosqueDropZoneProps
           description: `تم نقل ${draggedMosque.name} بنجاح`,
         });
       } else {
-        // Get the mosque data to copy
-        const { data: mosque } = await supabase
+        const { data: mosque, error: fetchError } = await supabase
           .from('mosques')
           .select('*')
           .eq('id', draggedMosque.id)
           .single();
 
+        if (fetchError) throw fetchError;
+
         if (mosque) {
-          // Create a new mosque with opposite is_holy_place value
           const { id, created_at, updated_at, ...mosqueData } = mosque;
-          const { error } = await supabase
+          const { error: insertError } = await supabase
             .from('mosques')
             .insert([{ ...mosqueData, is_holy_place: !mosque.is_holy_place }]);
 
-          if (error) throw error;
+          if (insertError) throw insertError;
 
           toast({
             title: "تم النسخ بنجاح",
@@ -67,6 +66,8 @@ const MosqueDropZone = ({ is_holy_place, children, onDrop }: MosqueDropZoneProps
           });
         }
       }
+      
+      setShowModal(false);
       onDrop();
     } catch (error) {
       console.error('Error:', error);
@@ -76,17 +77,16 @@ const MosqueDropZone = ({ is_holy_place, children, onDrop }: MosqueDropZoneProps
         variant: "destructive",
       });
     }
-    setShowModal(false);
   };
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'MOSQUE',
     drop: (item: any) => {
-      // Only show modal if dropping to a different zone type
       if (item.is_holy_place !== is_holy_place) {
         setDraggedMosque(item);
         setShowModal(true);
       }
+      return undefined;
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver() && monitor.getItem()?.is_holy_place !== is_holy_place,
@@ -96,8 +96,8 @@ const MosqueDropZone = ({ is_holy_place, children, onDrop }: MosqueDropZoneProps
   return (
     <div
       ref={drop}
-      className={`min-h-[500px] rounded-lg transition-colors ${
-        isOver ? 'bg-primary/10' : ''
+      className={`min-h-[500px] rounded-lg p-4 transition-colors ${
+        isOver ? 'bg-primary/10 border-2 border-dashed border-primary' : ''
       }`}
     >
       {children}
