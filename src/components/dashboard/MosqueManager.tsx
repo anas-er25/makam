@@ -15,6 +15,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { createClient } from "@supabase/supabase-js";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import ImageUpload from "./ImageUpload";
+import MosqueDropZone from "../MosqueDropZone";
+import MosqueCard from "../MosqueCard";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -207,25 +209,15 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
         </DialogContent>
       </Dialog>
 
+      <MosqueDropZone isHolyPlace={isHolyPlace} onDrop={fetchMosques} />
+
       <div className="grid gap-4">
         {mosques.map((mosque) => (
           <div
             key={mosque.id}
             className="flex items-center justify-between rounded-lg border p-4"
           >
-            <div className="flex items-center gap-4">
-              {mosque.image_url && (
-                <img
-                  src={mosque.image_url}
-                  alt={mosque.name}
-                  className="h-16 w-16 rounded-lg object-cover"
-                />
-              )}
-              <div>
-                <h3 className="font-semibold">{mosque.name}</h3>
-                <p className="text-sm text-gray-500">{mosque.location}</p>
-              </div>
-            </div>
+            <MosqueCard {...mosque} />
             <div className="flex gap-2">
               <Button
                 variant="outline"

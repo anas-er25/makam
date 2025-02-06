@@ -1,6 +1,6 @@
 
-import { MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
+import { MapPin, Move } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +16,7 @@ interface MosqueCardProps {
   image_url: string;
   location: string;
   description: string;
+  is_holy_place: boolean;
 }
 
 const MosqueCard = ({
@@ -24,14 +25,39 @@ const MosqueCard = ({
   image_url,
   location,
   description,
+  is_holy_place,
 }: MosqueCardProps) => {
+  const loc = useLocation();
+  const isDashboard = loc.pathname === "/dashboard";
+
+  const handleDragStart = (e: React.DragEvent) => {
+    if (!isDashboard) return;
+    e.dataTransfer.setData(
+      "mosque",
+      JSON.stringify({ id, name, image_url, location, description, is_holy_place })
+    );
+  };
+
   return (
-    <div className="rounded-lg border border-gray-200 bg-white shadow-md">
-      <img
-        src={image_url}
-        alt={name}
-        className="h-48 w-full rounded-t-lg object-cover"
-      />
+    <div
+      className={`rounded-lg border border-gray-200 bg-white shadow-md ${
+        isDashboard ? "cursor-move" : ""
+      }`}
+      draggable={isDashboard}
+      onDragStart={handleDragStart}
+    >
+      <div className="relative">
+        <img
+          src={image_url}
+          alt={name}
+          className="h-48 w-full rounded-t-lg object-cover"
+        />
+        {isDashboard && (
+          <div className="absolute right-2 top-2 rounded-full bg-white/80 p-1">
+            <Move className="h-5 w-5 text-gray-600" />
+          </div>
+        )}
+      </div>
       <div className="p-6">
         <h3 className="text-xl font-bold text-foreground">{name}</h3>
         <div className="mt-2 flex items-center text-gray-600">
