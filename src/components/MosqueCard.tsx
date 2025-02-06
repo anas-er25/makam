@@ -1,6 +1,6 @@
 
-import { MapPin, Move } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -9,15 +9,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useDrag } from 'react-dnd';
 
 interface MosqueCardProps {
   id: string;
   name: string;
-  image_url: string[];
+  image_url: string;
   location: string;
   description: string;
-  is_holy_place: boolean;
 }
 
 const MosqueCard = ({
@@ -26,39 +24,14 @@ const MosqueCard = ({
   image_url,
   location,
   description,
-  is_holy_place,
 }: MosqueCardProps) => {
-  const { pathname } = useLocation();
-  const isDashboard = pathname === '/dashboard';
-
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'MOSQUE',
-    item: { id, name, is_holy_place },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-    canDrag: () => isDashboard,
-  }));
-
   return (
-    <div
-      ref={isDashboard ? drag : null}
-      className={`rounded-lg border border-gray-200 bg-white shadow-md transition-opacity ${
-        isDragging ? 'opacity-50' : 'opacity-100'
-      }`}
-    >
-      <div className="relative">
-        <img
-          src={image_url[0]}
-          alt={name}
-          className="h-48 w-full rounded-t-lg object-cover"
-        />
-        {isDashboard && (
-          <div className="absolute right-2 top-2">
-            <Move className="h-6 w-6 cursor-move text-white drop-shadow-lg" />
-          </div>
-        )}
-      </div>
+    <div className="rounded-lg border border-gray-200 bg-white shadow-md">
+      <img
+        src={image_url}
+        alt={name}
+        className="h-48 w-full rounded-t-lg object-cover"
+      />
       <div className="p-6">
         <h3 className="text-xl font-bold text-foreground">{name}</h3>
         <div className="mt-2 flex items-center text-gray-600">
@@ -82,7 +55,7 @@ const MosqueCard = ({
               </DialogHeader>
               <div className="mt-4 space-y-4">
                 <img
-                  src={image_url[0]}
+                  src={image_url}
                   alt={name}
                   className="w-full rounded-lg object-cover"
                 />
