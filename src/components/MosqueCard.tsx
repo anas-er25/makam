@@ -18,7 +18,6 @@ interface MosqueCardProps {
   location: string;
   description: string;
   is_holy_place: boolean;
-  onDragStart?: () => void;
 }
 
 const MosqueCard = ({
@@ -29,17 +28,20 @@ const MosqueCard = ({
   description,
   is_holy_place,
 }: MosqueCardProps) => {
+  // Only enable drag functionality if we're in the dashboard (check URL)
+  const isDashboard = window.location.pathname === '/dashboard';
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'MOSQUE',
     item: { id, name, is_holy_place },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
+    canDrag: () => isDashboard,
   }));
 
   return (
     <div
-      ref={drag}
+      ref={isDashboard ? drag : null}
       className={`rounded-lg border border-gray-200 bg-white shadow-md transition-opacity ${
         isDragging ? 'opacity-50' : 'opacity-100'
       }`}
@@ -50,9 +52,11 @@ const MosqueCard = ({
           alt={name}
           className="h-48 w-full rounded-t-lg object-cover"
         />
-        <div className="absolute right-2 top-2">
-          <Move className="h-6 w-6 cursor-move text-white drop-shadow-lg" />
-        </div>
+        {isDashboard && (
+          <div className="absolute right-2 top-2">
+            <Move className="h-6 w-6 cursor-move text-white drop-shadow-lg" />
+          </div>
+        )}
       </div>
       <div className="p-6">
         <h3 className="text-xl font-bold text-foreground">{name}</h3>
