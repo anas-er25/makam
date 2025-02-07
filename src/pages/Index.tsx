@@ -87,6 +87,7 @@ const Index = () => {
               image_url={mosque.image_url}
               location={mosque.location}
               description={mosque.description?.substring(0, 100) + "..."}
+              is_holy_place={mosque.is_holy_place}
             />
           ))}
         </div>
