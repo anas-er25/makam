@@ -60,9 +60,7 @@ const Quran = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["quran"],
     queryFn: async () => {
-      const response = await axios.get<ApiResponse>(
-        "https://api.alquran.cloud/v1/quran/quran-uthmani"
-      );
+      const response = await axios.get<ApiResponse>(import.meta.env.VITE_QURAN_API_KEY);
       return response.data;
     },
   });
@@ -122,7 +120,6 @@ const Quran = () => {
           setSelectedSurah(surah);
           foundAyah = true;
           
-          // Scroll to the ayah after the component updates
           setTimeout(() => {
             const ayahElement = document.getElementById(`ayah-${ayah.number}`);
             if (ayahElement) {
