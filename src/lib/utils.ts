@@ -23,6 +23,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const topNavItems = [
   { icon: Home, label: "الرئيسية", path: "/" },
+  { icon: Home, label: "القرءان الكريم", path: "/quran" },
   { icon: Book, label: "كتبي", path: "/books" },
   { icon: Flag, label: "قضيتي ", path: "/palestine" },
   { icon: Landmark, label: "مقدساتي", path: "/holy-places" },

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,7 +14,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Feedback from "./pages/Feedback";
 import Books from "./pages/Books";
-import Quran from "./pages/Quran";  // Added import for Quran page
+import Quran from "./pages/Quran"; // Added import for Quran page
 import MosqueDetails from "./pages/MosqueDetails";
 import NotFound from "./pages/NotFound";
 
@@ -31,6 +30,7 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
             <Route path="/holy-places" element={<HolyPlaces />} />
+            <Route path="/quran" element={<Quran />} />
             <Route path="/palestine" element={<Palestine />} />
             <Route path="/about" element={<About />} />
             <Route path="/my-tools" element={<MyTools />} />
@@ -39,7 +39,8 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/books" element={<Books />} />
-            <Route path="/quran" element={<Quran />} />  {/* Added route for Quran page */}
+            <Route path="/quran" element={<Quran />} />{" "}
+            {/* Added route for Quran page */}
             <Route path="/mosque/:id" element={<MosqueDetails />} />
             <Route path="*" element={<NotFound />} />
           </Route>
