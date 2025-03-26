@@ -7,6 +7,7 @@ import {
   Info,
   Heart,
   Book,
+  BookOpen,
   UserPlus,
   ExternalLink,
   Share2,
@@ -23,7 +24,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const topNavItems = [
   { icon: Home, label: "الرئيسية", path: "/" },
-  { icon: Home, label: "القرءان الكريم", path: "/quran" },
+  { icon: BookOpen, label: "القرءان الكريم", path: "/quran" },
   { icon: Book, label: "كتبي", path: "/books" },
   { icon: Flag, label: "قضيتي ", path: "/palestine" },
   { icon: Landmark, label: "مقدساتي", path: "/holy-places" },
@@ -35,7 +36,7 @@ export const topNavItems = [
 
 export const mainNavItems = [
   { path: "/", icon: Home, label: "الرئيسية" },
-  { path: "/holy-places", icon: Landmark, label: "الأماكن المقدسة" },
+  { path: "/quran", icon: BookOpen, label: "القرءان الكريم" },
   { path: "/palestine", icon: Flag, label: "قضيتي" },
   { path: "/about", icon: Info, label: "عن المنصة" },
 ];
