@@ -1,9 +1,10 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { createClient } from "@supabase/supabase-js";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import MosqueManager from "@/components/dashboard/MosqueManager";
 
 const supabase = createClient(
@@ -28,37 +29,23 @@ const Dashboard = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    toast({
-      title: "تم تسجيل الخروج بنجاح",
-      description: "نراك قريباً!",
-    });
-    navigate("/login");
-  };
-
   return (
-    <div className="container py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">لوحة التحكم</h1>
-        <Button onClick={handleSignOut} variant="outline">
-          تسجيل الخروج
-        </Button>
+    <DashboardLayout title="إدارة المحتوى">
+      <div className="bg-white rounded-lg shadow p-6">
+        <Tabs defaultValue="mosques" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="mosques" className="text-lg py-3">المساجد</TabsTrigger>
+            <TabsTrigger value="holy-places" className="text-lg py-3">الأماكن المقدسة</TabsTrigger>
+          </TabsList>
+          <TabsContent value="mosques">
+            <MosqueManager />
+          </TabsContent>
+          <TabsContent value="holy-places">
+            <MosqueManager isHolyPlace />
+          </TabsContent>
+        </Tabs>
       </div>
-
-      <Tabs defaultValue="mosques" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="mosques">المساجد</TabsTrigger>
-          <TabsTrigger value="holy-places">الأماكن المقدسة</TabsTrigger>
-        </TabsList>
-        <TabsContent value="mosques">
-          <MosqueManager />
-        </TabsContent>
-        <TabsContent value="holy-places">
-          <MosqueManager isHolyPlace />
-        </TabsContent>
-      </Tabs>
-    </div>
+    </DashboardLayout>
   );
 };
 

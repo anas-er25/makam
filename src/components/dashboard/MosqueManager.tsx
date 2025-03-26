@@ -13,10 +13,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { createClient } from "@supabase/supabase-js";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import ImageUpload from "./ImageUpload";
-import MosqueDropZone from "../MosqueDropZone";
-import MosqueCard from "../MosqueCard";
+import EnhancedMosqueDropZone from "./EnhancedMosqueDropZone";
+import MosqueItem from "./MosqueItem";
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -38,9 +38,11 @@ interface MosqueManagerProps {
 
 const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
   const [mosques, setMosques] = useState<Mosque[]>([]);
+  const [filteredMosques, setFilteredMosques] = useState<Mosque[]>([]);
   const [selectedMosque, setSelectedMosque] = useState<Mosque | null>(null);
   const [images, setImages] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -54,6 +56,19 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
       setImages([]);
     }
   }, [selectedMosque]);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredMosques(mosques);
+    } else {
+      const filtered = mosques.filter(
+        mosque => 
+          mosque.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          mosque.location.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredMosques(filtered);
+    }
+  }, [searchQuery, mosques]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -116,6 +131,7 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
       if (error) throw error;
 
       setMosques(data || []);
+      setFilteredMosques(data || []);
     } catch (error) {
       console.error("Error fetching mosques:", error);
       toast({
@@ -147,99 +163,114 @@ const MosqueManager = ({ isHolyPlace = false }: MosqueManagerProps) => {
     }
   };
 
+  const handleDragStart = (e: React.DragEvent, mosque: Mosque) => {
+    e.dataTransfer.setData(
+      "mosque",
+      JSON.stringify(mosque)
+    );
+  };
+
   return (
     <div className="space-y-6">
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
-          <Button
-            onClick={() => {
-              setSelectedMosque(null);
-              setImages([]);
-            }}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            إضافة {isHolyPlace ? "مكان مقدس" : "مسجد"} جديد
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {selectedMosque ? "تعديل" : "إضافة"}{" "}
-              {isHolyPlace ? "مكان مقدس" : "مسجد"}
-            </DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name">الاسم</Label>
-              <Input
-                id="name"
-                name="name"
-                defaultValue={selectedMosque?.name}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="location">الموقع</Label>
-              <Input
-                id="location"
-                name="location"
-                defaultValue={selectedMosque?.location}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="description">الوصف</Label>
-              <Textarea
-                id="description"
-                name="description"
-                defaultValue={selectedMosque?.description}
-                required
-              />
-            </div>
-            <div>
-              <Label>الصور</Label>
-              <ImageUpload
-                multiple={false}
-                images={images}
-                onImagesChange={setImages}
-              />
-            </div>
-            <Button type="submit">حفظ</Button>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button
+              onClick={() => {
+                setSelectedMosque(null);
+                setImages([]);
+              }}
+              className="bg-primary hover:bg-primary/90"
+            >
+              <Plus className="ml-2 h-4 w-4" />
+              إضافة {isHolyPlace ? "مكان مقدس" : "مسجد"} جديد
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[550px]">
+            <DialogHeader>
+              <DialogTitle>
+                {selectedMosque ? "تعديل" : "إضافة"}{" "}
+                {isHolyPlace ? "مكان مقدس" : "مسجد"}
+              </DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="name">الاسم</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  defaultValue={selectedMosque?.name}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="location">الموقع</Label>
+                <Input
+                  id="location"
+                  name="location"
+                  defaultValue={selectedMosque?.location}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="description">الوصف</Label>
+                <Textarea
+                  id="description"
+                  name="description"
+                  defaultValue={selectedMosque?.description}
+                  required
+                />
+              </div>
+              <div>
+                <Label>الصور</Label>
+                <ImageUpload
+                  multiple={false}
+                  images={images}
+                  onImagesChange={setImages}
+                />
+              </div>
+              <Button type="submit" className="w-full">حفظ</Button>
+            </form>
+          </DialogContent>
+        </Dialog>
 
-      <MosqueDropZone isHolyPlace={isHolyPlace} onDrop={fetchMosques} />
+        <div className="relative w-full sm:w-64">
+          <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="بحث..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-3 pr-10"
+          />
+        </div>
+      </div>
 
-      <div className="grid gap-4">
-        {mosques.map((mosque) => (
-          <div
+      <EnhancedMosqueDropZone isHolyPlace={isHolyPlace} onDrop={fetchMosques} />
+
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {filteredMosques.map((mosque) => (
+          <MosqueItem
             key={mosque.id}
-            className="flex items-center justify-between rounded-lg border p-4"
-          >
-            <MosqueCard {...mosque} />
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => {
-                  setSelectedMosque(mosque);
-                  setIsDialogOpen(true);
-                }}
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="destructive"
-                size="icon"
-                onClick={() => handleDelete(mosque.id)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+            {...mosque}
+            onEdit={() => {
+              setSelectedMosque(mosque);
+              setIsDialogOpen(true);
+            }}
+            onDelete={() => handleDelete(mosque.id)}
+            onDragStart={(e) => handleDragStart(e, mosque)}
+          />
         ))}
       </div>
+      
+      {filteredMosques.length === 0 && (
+        <div className="text-center p-8 border border-dashed rounded-lg">
+          <p className="text-gray-500">
+            {searchQuery ? 
+              "لا توجد نتائج مطابقة لبحثك" : 
+              `لا يوجد ${isHolyPlace ? "أماكن مقدسة" : "مساجد"} حتى الآن`}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
