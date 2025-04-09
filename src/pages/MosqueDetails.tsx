@@ -190,12 +190,16 @@ const MosqueDetails = () => {
           <CardContent className="p-6">
             <h2 className="mb-4 text-2xl font-semibold">الأنشطة</h2>
             <ul className="space-y-2">
-              {mosque.activities?.map((activity, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-primary" />
-                  <span>{activity}</span>
-                </li>
-              ))}
+              {mosque.activities ? (
+                mosque.activities?.map((activity, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-primary" />
+                    <span>{activity}</span>
+                  </li>
+                ))
+              ) : (
+                <p className="text-gray-600">لا توجد معلومات تواصل اجتماعي</p>
+              )}
             </ul>
           </CardContent>
         </Card>
@@ -204,19 +208,24 @@ const MosqueDetails = () => {
           <CardContent className="p-6">
             <h2 className="mb-4 text-2xl font-semibold">تواصل معنا</h2>
             <div className="space-y-4">
-              {mosque.contact?.phone && (
+              {/* Phone contact */}
+              {mosque.contact?.phone ? (
                 <div className="flex items-center gap-2">
                   <Phone className="h-5 w-5 text-gray-600" />
                   <span>{mosque.contact.phone}</span>
                 </div>
-              )}
-              {mosque.contact?.email && (
+              ) : null}
+
+              {/* Email contact */}
+              {mosque.contact?.email ? (
                 <div className="flex items-center gap-2">
                   <Mail className="h-5 w-5 text-gray-600" />
                   <span>{mosque.contact.email}</span>
                 </div>
-              )}
-              {mosque.contact?.social && (
+              ) : null}
+
+              {/* Social media contacts */}
+              {mosque.contact?.social ? (
                 <>
                   <Separator className="my-4" />
                   <div className="flex gap-4">
@@ -252,7 +261,14 @@ const MosqueDetails = () => {
                     )}
                   </div>
                 </>
-              )}
+              ) : null}
+
+              {/* Display the "لا توجد معلومات تواصل" message only if no contact info is available */}
+              {!mosque.contact?.phone &&
+                !mosque.contact?.email &&
+                !mosque.contact?.social && (
+                  <p className="text-gray-600">لا توجد معلومات تواصل</p>
+                )}
             </div>
           </CardContent>
         </Card>
