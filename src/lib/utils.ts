@@ -17,6 +17,7 @@ import {
   User2,
   MessageSquare,
   Pen,
+  OctagonMinus,
 } from "lucide-react";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,7 +29,7 @@ export const topNavItems = [
   { icon: Book, label: "كتبي", path: "/books" },
   { icon: Flag, label: "قضيتي ", path: "/palestine" },
   { icon: Landmark, label: "مقدساتي", path: "/holy-places" },
-  // { icon: ExternalLink, label: "أدواتي", path: "/my-tools" },
+  { icon: OctagonMinus, label: "أقاطع", path: "/boycott" },
   { icon: Heart, label: "كن صديقاً", path: "/be-friend" },
   { icon: MessageSquare, label: "تقديم ملاحظات", path: "/feedback" },
   // { icon: UserPlus, label: "تسجيل الدخول", path: "/login" },
@@ -131,7 +132,7 @@ export const palestineData = {
     {
       title: "كيف يمكنني المساعدة؟",
       description:
-        "هناك العديد من الطرق للمساهمة في دعم القضية الفلسطينية، من خلال التبرع للمؤسسات الإنسانية، نشر الوعي، والمشاركة في الفعاليات الداعمة.",
+        "هناك العديد من الطرق للمساهمة في دعم القضية الفلسطينية، من خلال التبرع للمؤسسات الإنسانية، نشر الوعي، المشاركة في الفعاليات الداعمة، و مقاطعة المنتوجات الداعمة للاحتلال.",
     },
   ],
   resources: [
@@ -210,5 +211,72 @@ export const helpCards = [
     icon: MessageSquare,
     title: "إدارة وسائل التواصل",
     description: "ساعدنا في إدارة حساباتنا على وسائل التواصل",
+  },
+];
+
+// Boycott Alternatives Data
+type Alternative = {
+  category: string;
+  original: string;
+  originCountry: string;
+  alternatives: {
+    name: string;
+    country: string;
+  }[];
+};
+export const alternativesData: Alternative[] = [
+  {
+    category: "Design Software",
+    original: "Adobe Illustrator",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Inkscape", country: "Global" },
+      { name: "Affinity Designer", country: "United Kingdom" },
+    ],
+  },
+  {
+    category: "Productivity",
+    original: "Google Workspace",
+    originCountry: "United States",
+    alternatives: [
+      { name: "LARK Suite", country: "China" },
+      { name: "Zoho", country: "India" },
+    ],
+  },
+  {
+    category: "Photo Editing",
+    original: "Adobe Photoshop",
+    originCountry: "United States",
+    alternatives: [
+      { name: "GIMP", country: "Global" },
+      { name: "Affinity Photo", country: "United Kingdom" },
+    ],
+  },
+  {
+    category: "Project Management",
+    original: "Monday.com",
+    originCountry: "Israel",
+    alternatives: [
+      { name: "Jira", country: "Australia" },
+      { name: "Plane", country: "India" },
+    ],
+  },
+  {
+    category: "Office Suite",
+    original: "Microsoft Office",
+    originCountry: "United States",
+    alternatives: [
+      { name: "LibreOffice", country: "Germany" },
+      { name: "WPS Office", country: "China" },
+    ],
+  },
+  {
+    category: "Version Control",
+    original: "GitHub",
+    originCountry: "United States",
+    alternatives: [
+      { name: "GitLab", country: "Ukraine" },
+      { name: "Bitbucket", country: "Australia" },
+    ],
   },
 ];

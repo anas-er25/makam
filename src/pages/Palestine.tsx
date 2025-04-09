@@ -1,6 +1,6 @@
 import { palestineData } from "@/lib/utils";
-import {  ExternalLink } from "lucide-react";
-
+import { ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 const Palestine = () => {
   const currentDate = new Date();
   const occupationDate = new Date("1948-05-14"); // Date of the occupation
@@ -26,7 +26,17 @@ const Palestine = () => {
             <h2 className="mb-4 text-xl font-bold text-primary">
               {section.title}
             </h2>
-            <p className="text-gray-600">{section.description}</p>
+            <p className="text-gray-600">
+              {section.description}{" "}
+              <Link to={'/boycott'} className="text-gray-800 hover:text-gray-600">
+                <span className="text-primary font-bold">قاطع</span>
+                <span className="text-primary font-bold">
+                  {" "}
+                  المنتجات الإسرائيلية
+                </span>
+                <span className="text-primary font-bold"> من هنا</span>
+              </Link>
+            </p>
           </div>
         ))}
       </div>
