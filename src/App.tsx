@@ -16,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 import Feedback from "./pages/Feedback";
 import Books from "./pages/Books";
 import Quran from "./pages/Quran";
+import Boycott from "./pages/Boycott";
 import MosqueDetails from "./pages/MosqueDetails";
 import NotFound from "./pages/NotFound";
 import Boycott from "./pages/Boycott";
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/holy-places" element={<HolyPlaces />} />
             <Route path="/quran" element={<Quran />} />
             <Route path="/palestine" element={<Palestine />} />
+            <Route path="/boycott" element={<Boycott />} />
             <Route path="/about" element={<About />} />
             <Route path="/my-tools" element={<MyTools />} />
             <Route path="/be-friend" element={<BeFriend />} />
