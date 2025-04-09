@@ -19,6 +19,7 @@ import Quran from "./pages/Quran";
 import Boycott from "./pages/Boycott";
 import MosqueDetails from "./pages/MosqueDetails";
 import NotFound from "./pages/NotFound";
+import Boycott from "./pages/Boycott";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/books" element={<Books />} />
             <Route path="/mosque/:id" element={<MosqueDetails />} />
+            <Route path="/boycott" element={<Boycott />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
