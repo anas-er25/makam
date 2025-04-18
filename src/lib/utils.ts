@@ -226,6 +226,33 @@ type Alternative = {
 };
 export const alternativesData: Alternative[] = [
   {
+    category: "Productivity",
+    original: "Google Forms",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Zoho Forms", country: "India" },
+      { name: "JotForm", country: "Global" },
+    ],
+  },
+  {
+    category: "Productivity",
+    original: "Tabnine",
+    originCountry: "Israel",
+    alternatives: [
+      { name: "Refact", country: "United Kingdom" },
+      { name: "CodeGeeX", country: "China" },
+    ],
+  },
+  {
+    category: "System Software",
+    original: "Windows",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Ubuntu", country: "Global" },
+      { name: "Fedora", country: "Global" },
+    ],
+  },
+  {
     category: "Design Software",
     original: "Adobe Illustrator",
     originCountry: "United States",
@@ -258,7 +285,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "Israel",
     alternatives: [
       { name: "Jira", country: "Australia" },
-      { name: "Plane", country: "India" },
+      { name: "ClickUp", country: "Global" },
     ],
   },
   {
@@ -276,7 +303,232 @@ export const alternativesData: Alternative[] = [
     originCountry: "United States",
     alternatives: [
       { name: "GitLab", country: "Ukraine" },
-      { name: "Bitbucket", country: "Australia" },
+      { name: "SourceForge", country: "Global" },
+    ],
+  },
+  {
+    category: "Cybersecurity",
+    original: "Check Point",
+    originCountry: "Israel",
+    alternatives: [
+      { name: "Sophos", country: "United Kingdom" },
+      { name: "Kaspersky", country: "Global" },
+    ],
+  },
+  {
+    category: "Web Browser",
+    original: "Google Chrome",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Firefox", country: "Global" },
+      { name: "Vivaldi", country: "Global" },
+    ],
+  },
+  {
+    category: "Website Builder",
+    original: "Wix",
+    originCountry: "Israel",
+    alternatives: [
+      { name: "Webflow", country: "Global" },
+      { name: "Squarespace", country: "Global" },
+    ],
+  },
+  {
+    category: "Video Editing",
+    original: "Adobe Premiere Pro",
+    originCountry: "United States",
+    alternatives: [
+      { name: "DaVinci Resolve", country: "Australia" },
+      { name: "HitFilm", country: "United Kingdom" },
+    ],
+  },
+  {
+    category: "Cloud Storage",
+    original: "Dropbox",
+    originCountry: "United States",
+    alternatives: [
+      { name: "pCloud", country: "Global" },
+      { name: "Mega", country: "Global" },
+    ],
+  },
+  {
+    category: "Communication",
+    original: "Slack",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Mattermost", country: "Germany" },
+      { name: "Rocket.Chat", country: "Global" },
+    ],
+  },
+  {
+    category: "Video Conferencing",
+    original: "Zoom",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Jitsi Meet", country: "Global" },
+      { name: "BigBlueButton", country: "Global" },
+    ],
+  },
+  {
+    category: "Animation Software",
+    original: "Adobe After Effects",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Blender", country: "Ukraine" },
+      { name: "Natron", country: "Global" },
+    ],
+  },
+  {
+    category: "Customer Support",
+    original: "Zendesk",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Freshdesk", country: "India" },
+      { name: "Zoho Desk", country: "India" },
+    ],
+  },
+  {
+    category: "Marketing Automation",
+    original: "HubSpot",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Mautic", country: "Global" },
+      { name: "ActiveCampaign", country: "Global" },
+    ],
+  },
+  {
+    category: "E-commerce Platform",
+    original: "Shopify",
+    originCountry: "United States",
+    alternatives: [
+      { name: "WooCommerce", country: "Global" },
+      { name: "PrestaShop", country: "Global" },
+    ],
+  },
+  {
+    category: "Password Manager",
+    original: "LastPass",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Bitwarden", country: "Global" },
+      { name: "KeePass", country: "Germany" },
+    ],
+  },
+  {
+    category: "Analytics",
+    original: "Google Analytics",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Matomo", country: "Global" },
+      { name: "Fathom Analytics", country: "Global" },
+    ],
+  },
+  {
+    category: "Remote Desktop",
+    original: "TeamViewer",
+    originCountry: "United States",
+    alternatives: [
+      { name: "AnyDesk", country: "Germany" },
+      { name: "RustDesk", country: "Global" },
+    ],
+  },
+  {
+    category: "Game Development",
+    original: "Unity",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Godot Engine", country: "Global" },
+      { name: "Unreal Engine", country: "Global" },
+    ],
+  },
+  {
+    category: "Database Management",
+    original: "Oracle Database",
+    originCountry: "United States",
+    alternatives: [
+      { name: "PostgreSQL", country: "Global" },
+      { name: "MariaDB", country: "Global" },
+    ],
+  },
+  {
+    category: "Note-Taking",
+    original: "Evernote",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Joplin", country: "Global" },
+      { name: "Obsidian", country: "Global" },
+    ],
+  },
+  {
+    category: "ERP Software",
+    original: "SAP",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Odoo", country: "Global" },
+      { name: "ERPNext", country: "India" },
+    ],
+  },
+  {
+    category: "CAD Software",
+    original: "AutoCAD",
+    originCountry: "United States",
+    alternatives: [
+      { name: "FreeCAD", country: "Global" },
+      { name: "LibreCAD", country: "Global" },
+    ],
+  },
+  {
+    category: "Virtualization",
+    original: "VMware",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Proxmox VE", country: "Germany" },
+      { name: "VirtualBox", country: "Global" },
+    ],
+  },
+  {
+    category: "Time Tracking",
+    original: "Toggl",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Clockify", country: "Global" },
+      { name: "TimeCamp", country: "Global" },
+    ],
+  },
+  {
+    category: "CRM Software",
+    original: "Salesforce",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Zoho CRM", country: "India" },
+      { name: "Odoo CRM", country: "Global" },
+    ],
+  },
+  {
+    category: "Email Client",
+    original: "Microsoft Outlook",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Thunderbird", country: "Global" },
+      { name: "Mailspring", country: "Global" },
+    ],
+  },
+  {
+    category: "Network Monitoring",
+    original: "SolarWinds",
+    originCountry: "United States",
+    alternatives: [
+      { name: "Zabbix", country: "Global" },
+      { name: "Nagios", country: "Global" },
+    ],
+  },
+  {
+    category: "Crowdsourcing",
+    original: "Fiverr",
+    originCountry: "Israel",
+    alternatives: [
+      { name: "Upwork", country: "Global" },
+      { name: "Freelancer", country: "Australia" },
     ],
   },
 ];

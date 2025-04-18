@@ -19,7 +19,6 @@ import Quran from "./pages/Quran";
 import Boycott from "./pages/Boycott";
 import MosqueDetails from "./pages/MosqueDetails";
 import NotFound from "./pages/NotFound";
-import Boycott from "./pages/Boycott";
 
 const queryClient = new QueryClient();
 
