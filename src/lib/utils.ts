@@ -231,7 +231,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "United States",
     alternatives: [
       { name: "Zoho Forms", country: "India" },
-      { name: "JotForm", country: "Global" },
+      { name: "JotForm", country: "Turkey" },
     ],
   },
   {
@@ -248,7 +248,7 @@ export const alternativesData: Alternative[] = [
     original: "Windows",
     originCountry: "United States",
     alternatives: [
-      { name: "Ubuntu", country: "Global" },
+      { name: "Ubuntu", country: "South Africa" },
       { name: "Fedora", country: "Global" },
     ],
   },
@@ -302,7 +302,7 @@ export const alternativesData: Alternative[] = [
     original: "GitHub",
     originCountry: "United States",
     alternatives: [
-      { name: "GitLab", country: "Ukraine" },
+      { name: "GitLab", country: "Netherlands" },
       { name: "SourceForge", country: "Global" },
     ],
   },
@@ -312,7 +312,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "Israel",
     alternatives: [
       { name: "Sophos", country: "United Kingdom" },
-      { name: "Kaspersky", country: "Global" },
+      { name: "Kaspersky", country: "Russia" },
     ],
   },
   {
@@ -321,7 +321,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "United States",
     alternatives: [
       { name: "Firefox", country: "Global" },
-      { name: "Vivaldi", country: "Global" },
+      { name: "Vivaldi", country: "Norway" },
     ],
   },
   {
@@ -347,8 +347,8 @@ export const alternativesData: Alternative[] = [
     original: "Dropbox",
     originCountry: "United States",
     alternatives: [
-      { name: "pCloud", country: "Global" },
-      { name: "Mega", country: "Global" },
+      { name: "pCloud", country: "Switzerland" },
+      { name: "Mega", country: "New Zealand" },
     ],
   },
   {
@@ -357,7 +357,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "United States",
     alternatives: [
       { name: "Mattermost", country: "Germany" },
-      { name: "Rocket.Chat", country: "Global" },
+      { name: "Rocket.Chat", country: "Brazil" },
     ],
   },
   {
@@ -366,7 +366,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "United States",
     alternatives: [
       { name: "Jitsi Meet", country: "Global" },
-      { name: "BigBlueButton", country: "Global" },
+      { name: "BigBlueButton", country: "Canada" },
     ],
   },
   {
@@ -374,8 +374,8 @@ export const alternativesData: Alternative[] = [
     original: "Adobe After Effects",
     originCountry: "United States",
     alternatives: [
-      { name: "Blender", country: "Ukraine" },
-      { name: "Natron", country: "Global" },
+      { name: "Blender", country: "Netherlands" },
+      { name: "Natron", country: "France" },
     ],
   },
   {
@@ -402,7 +402,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "United States",
     alternatives: [
       { name: "WooCommerce", country: "Global" },
-      { name: "PrestaShop", country: "Global" },
+      { name: "PrestaShop", country: "France" },
     ],
   },
   {
@@ -419,8 +419,8 @@ export const alternativesData: Alternative[] = [
     original: "Google Analytics",
     originCountry: "United States",
     alternatives: [
-      { name: "Matomo", country: "Global" },
-      { name: "Fathom Analytics", country: "Global" },
+      { name: "Matomo", country: "New Zealand" },
+      { name: "Fathom Analytics", country: "Canada" },
     ],
   },
   {
@@ -447,7 +447,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "United States",
     alternatives: [
       { name: "PostgreSQL", country: "Global" },
-      { name: "MariaDB", country: "Global" },
+      { name: "MariaDB", country: "Finland" },
     ],
   },
   {
@@ -464,7 +464,7 @@ export const alternativesData: Alternative[] = [
     original: "SAP",
     originCountry: "United States",
     alternatives: [
-      { name: "Odoo", country: "Global" },
+      { name: "Odoo", country: "Belgium" },
       { name: "ERPNext", country: "India" },
     ],
   },
@@ -491,8 +491,8 @@ export const alternativesData: Alternative[] = [
     original: "Toggl",
     originCountry: "United States",
     alternatives: [
-      { name: "Clockify", country: "Global" },
-      { name: "TimeCamp", country: "Global" },
+      { name: "Clockify", country: "Serbia" },
+      { name: "TimeCamp", country: "Poland" },
     ],
   },
   {
@@ -501,7 +501,7 @@ export const alternativesData: Alternative[] = [
     originCountry: "United States",
     alternatives: [
       { name: "Zoho CRM", country: "India" },
-      { name: "Odoo CRM", country: "Global" },
+      { name: "Odoo CRM", country: "Belgium" },
     ],
   },
   {
@@ -518,7 +518,7 @@ export const alternativesData: Alternative[] = [
     original: "SolarWinds",
     originCountry: "United States",
     alternatives: [
-      { name: "Zabbix", country: "Global" },
+      { name: "Zabbix", country: "Latvia" },
       { name: "Nagios", country: "Global" },
     ],
   },
