@@ -321,7 +321,7 @@ const Quran = () => {
                 <TabsContent value="arabic" className="space-y-4">
                   <div className="rounded-lg bg-muted/50 p-6 text-right leading-loose">
                     {selectedSurah.number !== 1 && (
-                      <p className="mb-6 text-center text-xl">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+                      <p className="mb-6 text-center text-xl font-bold text-primary">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
                     )}
                     
                     {selectedSurah.ayahs.map((ayah) => (
