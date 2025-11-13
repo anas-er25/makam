@@ -55,6 +55,9 @@ const Quran = () => {
   const [selectedSurah, setSelectedSurah] = useState<Surah | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("surah"); // Can be "surah" or "ayah"
+  const [viewMode, setViewMode] = useState<"surah" | "hizb" | "thumn">("surah");
+  const [selectedHizb, setSelectedHizb] = useState<number>(1);
+  const [selectedThumn, setSelectedThumn] = useState<number>(1);
   const { toast } = useToast();
 
   const { data, isLoading, error } = useQuery({
@@ -83,6 +86,33 @@ const Quran = () => {
     }
   };
 
+  const getAyahsByHizb = (hizbNumber: number) => {
+    if (!data) return [];
+    const allAyahs: Ayah[] = [];
+    data.data.surahs.forEach(surah => {
+      surah.ayahs.forEach(ayah => {
+        const ayahHizb = Math.ceil(ayah.hizbQuarter / 4);
+        if (ayahHizb === hizbNumber) {
+          allAyahs.push(ayah);
+        }
+      });
+    });
+    return allAyahs;
+  };
+
+  const getAyahsByThumn = (thumnNumber: number) => {
+    if (!data) return [];
+    const allAyahs: Ayah[] = [];
+    data.data.surahs.forEach(surah => {
+      surah.ayahs.forEach(ayah => {
+        if (ayah.hizbQuarter === thumnNumber) {
+          allAyahs.push(ayah);
+        }
+      });
+    });
+    return allAyahs;
+  };
+
   const handleSearch = () => {
     if (!searchQuery.trim() || !data) return;
 
@@ -98,6 +128,7 @@ const Quran = () => {
 
       if (foundSurah) {
         setSelectedSurah(foundSurah);
+        setViewMode("surah");
       } else {
         toast({
           title: "سورة غير موجودة",
@@ -118,6 +149,7 @@ const Quran = () => {
         
         if (ayah) {
           setSelectedSurah(surah);
+          setViewMode("surah");
           foundAyah = true;
           
           setTimeout(() => {
@@ -176,7 +208,15 @@ const Quran = () => {
         <p className="text-muted-foreground">اقرأ وابحث في القرآن الكريم</p>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-8 space-y-4">
+        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "surah" | "hizb" | "thumn")}>
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="surah">السور</TabsTrigger>
+            <TabsTrigger value="hizb">الأحزاب</TabsTrigger>
+            <TabsTrigger value="thumn">الأثمان</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
         <div className="flex flex-col gap-4 md:flex-row">
           <div className="flex flex-1 gap-2">
             <Select 
@@ -211,25 +251,56 @@ const Quran = () => {
         <div className="h-[70vh] overflow-y-auto rounded-lg border border-border p-4">
           <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold">
             <Book className="h-5 w-5" />
-            <span>فهرس السور</span>
+            <span>
+              {viewMode === "surah" && "فهرس السور"}
+              {viewMode === "hizb" && "فهرس الأحزاب"}
+              {viewMode === "thumn" && "فهرس الأثمان"}
+            </span>
           </h2>
           <div className="space-y-1">
-            {data?.data.surahs.map((surah) => (
+            {viewMode === "surah" && data?.data.surahs.map((surah) => (
               <Button
                 key={surah.number}
                 variant={selectedSurah?.number === surah.number ? "default" : "ghost"}
                 className="w-full justify-start text-right"
-                onClick={() => handleSurahSelect(surah.number.toString())}
+                onClick={() => {
+                  handleSurahSelect(surah.number.toString());
+                  setViewMode("surah");
+                }}
               >
                 <span className="ml-2 inline-block w-8 text-center">{surah.number}.</span>
                 <span>{surah.name}</span>
+              </Button>
+            ))}
+            
+            {viewMode === "hizb" && Array.from({ length: 60 }, (_, i) => i + 1).map((hizbNum) => (
+              <Button
+                key={hizbNum}
+                variant={selectedHizb === hizbNum && viewMode === "hizb" ? "default" : "ghost"}
+                className="w-full justify-start text-right"
+                onClick={() => setSelectedHizb(hizbNum)}
+              >
+                <span className="ml-2 inline-block w-8 text-center">{hizbNum}.</span>
+                <span>الحزب {hizbNum}</span>
+              </Button>
+            ))}
+            
+            {viewMode === "thumn" && Array.from({ length: 240 }, (_, i) => i + 1).map((thumnNum) => (
+              <Button
+                key={thumnNum}
+                variant={selectedThumn === thumnNum && viewMode === "thumn" ? "default" : "ghost"}
+                className="w-full justify-start text-right"
+                onClick={() => setSelectedThumn(thumnNum)}
+              >
+                <span className="ml-2 inline-block w-8 text-center">{thumnNum}.</span>
+                <span>الثمن {thumnNum}</span>
               </Button>
             ))}
           </div>
         </div>
 
         <div className="rounded-lg border border-border p-6">
-          {selectedSurah && (
+          {viewMode === "surah" && selectedSurah && (
             <div>
               <div className="mb-6 text-center">
                 <h2 className="mb-2 text-2xl font-bold">{selectedSurah.name}</h2>
@@ -281,6 +352,58 @@ const Quran = () => {
                   </div>
                 </TabsContent>
               </Tabs>
+            </div>
+          )}
+          
+          {viewMode === "hizb" && (
+            <div>
+              <div className="mb-6 text-center">
+                <h2 className="mb-2 text-2xl font-bold">الحزب {selectedHizb}</h2>
+                <p className="text-muted-foreground">
+                  الحزب رقم {selectedHizb} من القرآن الكريم
+                </p>
+              </div>
+              
+              <div className="rounded-lg bg-muted/50 p-6 text-right leading-loose">
+                {getAyahsByHizb(selectedHizb).map((ayah) => (
+                  <span 
+                    key={ayah.number}
+                    id={`ayah-${ayah.number}`}
+                    className="inline transition-colors duration-500"
+                  >
+                    {ayah.text}
+                    <span className="mx-1 inline-block rounded-full bg-primary/10 px-2 py-0.5 text-sm">
+                      {ayah.numberInSurah}
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {viewMode === "thumn" && (
+            <div>
+              <div className="mb-6 text-center">
+                <h2 className="mb-2 text-2xl font-bold">الثمن {selectedThumn}</h2>
+                <p className="text-muted-foreground">
+                  الثمن رقم {selectedThumn} من القرآن الكريم
+                </p>
+              </div>
+              
+              <div className="rounded-lg bg-muted/50 p-6 text-right leading-loose">
+                {getAyahsByThumn(selectedThumn).map((ayah) => (
+                  <span 
+                    key={ayah.number}
+                    id={`ayah-${ayah.number}`}
+                    className="inline transition-colors duration-500"
+                  >
+                    {ayah.text}
+                    <span className="mx-1 inline-block rounded-full bg-primary/10 px-2 py-0.5 text-sm">
+                      {ayah.numberInSurah}
+                    </span>
+                  </span>
+                ))}
+              </div>
             </div>
           )}
         </div>
