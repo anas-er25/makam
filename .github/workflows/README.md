@@ -12,13 +12,13 @@ This workflow prevents your Supabase project from being automatically paused due
 
 ### Setup Instructions
 
-1. **Add Supabase credentials as GitHub Secrets** (Recommended):
+1. **Add Supabase credentials as GitHub Secrets** (Required):
    - Go to your repository Settings → Secrets and variables → Actions
    - Add the following secrets:
-     - `VITE_SUPABASE_URL`: Your Supabase project URL
+     - `VITE_SUPABASE_URL`: Your Supabase project URL (e.g., https://your-project.supabase.co)
      - `VITE_SUPABASE_ANON_KEY`: Your Supabase anonymous key
    
-   OR the workflow will use the hardcoded fallback URL from your `.env` file.
+   These secrets are required for the workflow to function properly.
 
 2. **Enable GitHub Actions**:
    - Ensure GitHub Actions are enabled in your repository settings

@@ -11,20 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
       - name: Ping Supabase to keep project active
         env:
-          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://wnrilspdibrqwihbtxrs.supabase.co' }}
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: |
           echo "Pinging Supabase project to keep it active..."
+          
+          # Check if required secrets are configured
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "✗ Error: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY secrets must be configured"
+            echo "Please add these secrets in: Settings → Secrets and variables → Actions"
+            exit 1
+          fi
           
           # Make a simple REST API call to Supabase
           # This queries the database to prevent inactivity pause
@@ -51,7 +50,7 @@ jobs:
       - name: Report status
         if: always()
         run: |
-          if [ ${{ job.status }} == 'success' ]; then
+          if [ '${{ job.status }}' == 'success' ]; then
             echo "✓ Supabase keep-alive check completed successfully"
           else
             echo "✗ Supabase keep-alive check failed"
