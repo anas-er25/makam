@@ -1,0 +1,50 @@
+name: Keep Supabase Active
+
+on:
+  schedule:
+    # Run every 6 days at 3:00 AM UTC to prevent Supabase from pausing after 7 days of inactivity
+    - cron: '0 3 */6 * *'
+  workflow_dispatch: # Allow manual triggering for testing
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Ping Supabase to keep project active
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          echo "Pinging Supabase project to keep it active..."
+          
+          # Check if required secrets are configured
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "✗ Error: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY secrets must be configured"
+            echo "Please add these secrets in: Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+          
+          # Make a simple REST API call to Supabase
+          # Query the mosques table to ensure actual database activity
+          response=$(curl -X GET \
+            "${SUPABASE_URL}/rest/v1/mosques?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            -w "\n%{http_code}" \
+            -s)
+          
+          http_code=$(echo "$response" | tail -n1)
+          
+          echo "Response HTTP Code: $http_code"
+          
+          # Check if the request was successful (2xx status codes)
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "✓ Successfully pinged Supabase. Project will remain active."
+            exit 0
+          else
+            echo "✗ Failed to ping Supabase. HTTP Code: $http_code"
+            exit 1
+          fi
