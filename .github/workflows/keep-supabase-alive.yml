@@ -2,7 +2,7 @@ name: Keep Supabase Active
 
 on:
   schedule:
-    # Run every 6 days (Monday at 3:00 AM UTC) to prevent Supabase from pausing after 7 days of inactivity
+    # Run every 6 days at 3:00 AM UTC to prevent Supabase from pausing after 7 days of inactivity
     - cron: '0 3 */6 * *'
   workflow_dispatch: # Allow manual triggering for testing
 
@@ -26,9 +26,9 @@ jobs:
           fi
           
           # Make a simple REST API call to Supabase
-          # This queries the database to prevent inactivity pause
+          # Query the mosques table to ensure actual database activity
           response=$(curl -X GET \
-            "${SUPABASE_URL}/rest/v1/" \
+            "${SUPABASE_URL}/rest/v1/mosques?select=id&limit=1" \
             -H "apikey: ${SUPABASE_ANON_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
             -w "\n%{http_code}" \
