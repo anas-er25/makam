@@ -1,0 +1,58 @@
+name: Keep Supabase Active
+
+on:
+  schedule:
+    # Run every 6 days (Monday at 3:00 AM UTC) to prevent Supabase from pausing after 7 days of inactivity
+    - cron: '0 3 */6 * *'
+  workflow_dispatch: # Allow manual triggering for testing
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Ping Supabase to keep project active
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://wnrilspdibrqwihbtxrs.supabase.co' }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          echo "Pinging Supabase project to keep it active..."
+          
+          # Make a simple REST API call to Supabase
+          # This queries the database to prevent inactivity pause
+          response=$(curl -X GET \
+            "${SUPABASE_URL}/rest/v1/" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            -w "\n%{http_code}" \
+            -s)
+          
+          http_code=$(echo "$response" | tail -n1)
+          
+          echo "Response HTTP Code: $http_code"
+          
+          # Check if the request was successful (2xx or 404 is fine - it means the connection worked)
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 500 ]; then
+            echo "✓ Successfully pinged Supabase. Project will remain active."
+            exit 0
+          else
+            echo "✗ Failed to ping Supabase. HTTP Code: $http_code"
+            exit 1
+          fi
+
+      - name: Report status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✓ Supabase keep-alive check completed successfully"
+          else
+            echo "✗ Supabase keep-alive check failed"
+          fi
