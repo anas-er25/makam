@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Ping Supabase to keep project active
         env:
-          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          SUPABASE_URL: https://wnrilspdibrqwihbtxrs.supabase.co
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inducmlsc3BkaWJycXdpaGJ0eHJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1ODAzMTksImV4cCI6MjA1NDE1NjMxOX0.up85Gcdl_Et8m3BF1ClqY0JlqHjfeMB8zipD5sODNs8
         run: |
           echo "Pinging Supabase project to keep it active..."
           
